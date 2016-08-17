@@ -145,7 +145,6 @@ static class Simulation
 
     static void RemoveDeath()
     {
-        if (MarkedForTermination.Count > 0) Debug.Log("Creature died!");
         Creatures.RemoveAll(simInf => MarkedForTermination.Contains(simInf.ID));
         MarkedForTermination = new HashSet<int>();
     }
@@ -163,7 +162,6 @@ static class Simulation
         foreach(KeyValuePair<Creature,Vector2> nb in NewBorns)
         {
             Creatures.Add(new SimInfo(nb.Key, nb.Value.x, nb.Value.y));
-            Debug.Log("New creature born!");
         }
         NewBorns = new Dictionary<Creature, Vector2>();
     }
