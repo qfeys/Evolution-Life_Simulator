@@ -44,18 +44,22 @@ public class CreatureAnimator : MonoBehaviour
         }
         GameObject creature = AllCreatures[CreatureID].CreatureGo;
         creature.transform.position = new Vector3(pos.x, pos.y);
-        creature.transform.rotation = Quaternion.Euler(0, 0, pos.z*Mathf.Rad2Deg);
+        creature.transform.rotation = Quaternion.Euler(0, 0, pos.z * Mathf.Rad2Deg);
     }
 
     private void AddCreatureToDict(int creatureID, Creature cData)
     {
         GameObject newCreature = new GameObject("Creature " + creatureID);
         AddNode(newCreature, cData.mainNode);
+        CircleCollider2D col = newCreature.AddComponent<CircleCollider2D>();
+        col.radius = cData.mainNode.size;  // Will I think be twice the radius of the main node
+        col.isTrigger = true;
+        newCreature.AddComponent<CreatureObject>().Init(cData, creatureID);
         AllCreatures.Add(creatureID, new DrawData(newCreature));
     }
 
     /// <summary>
-    /// Adds a node gameobject as a child to "oldNode", with as data "node"
+    /// Adds a node gameobject as a child to "oldNode", with as data "node". Is used recusive to add all childs as well
     /// </summary>
     private void AddNode(GameObject oldNode, Node node)
     {
@@ -108,5 +112,18 @@ public class CreatureAnimator : MonoBehaviour
             }
             return false;
         }
+    }
+
+    class CreatureObject : UnityEngine.UI.Selectable
+    {
+        public Creature own { get; private set; }
+        public int ID { get; private set; }
+
+        public void OnMouseDown()
+        {
+            DisplayManager.TheOne.SetSelection(own, ID);
+        }
+
+        public void Init(Creature own, int id) { this.own = own; ID = id; }
     }
 }
