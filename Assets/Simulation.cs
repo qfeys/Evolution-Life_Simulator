@@ -98,7 +98,7 @@ static class Simulation
             AddNew();
             PushData();
             Time++;
-            if (Time > 1000) ended = true;
+            if (Time > 2000) ended = true;
         }
     }
 
