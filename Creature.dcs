@@ -19,12 +19,12 @@
           <Node i:type="Thruster" z:Id="i3">
             <actuatorConnections xmlns:d7p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
               <d7p1:KeyValueOffloatfloat>
-                <d7p1:Key>1.83178711</d7p1:Key>
-                <d7p1:Value>3.50708</d7p1:Value>
+                <d7p1:Key>9.485352</d7p1:Key>
+                <d7p1:Value>14.7868652</d7p1:Value>
               </d7p1:KeyValueOffloatfloat>
               <d7p1:KeyValueOffloatfloat>
-                <d7p1:Key>2.57617188</d7p1:Key>
-                <d7p1:Value>2.19750977</d7p1:Value>
+                <d7p1:Key>2.12011719</d7p1:Key>
+                <d7p1:Value>11.0080566</d7p1:Value>
               </d7p1:KeyValueOffloatfloat>
             </actuatorConnections>
             <parent i:type="Spine" z:Ref="i2" />
@@ -49,12 +49,12 @@
           <Node i:type="Thruster" z:Id="i5">
             <actuatorConnections xmlns:d7p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
               <d7p1:KeyValueOffloatfloat>
-                <d7p1:Key>2.821045</d7p1:Key>
-                <d7p1:Value>0.135986328</d7p1:Value>
+                <d7p1:Key>12.7304688</d7p1:Key>
+                <d7p1:Value>0.112060547</d7p1:Value>
               </d7p1:KeyValueOffloatfloat>
               <d7p1:KeyValueOffloatfloat>
-                <d7p1:Key>2.00048828</d7p1:Key>
-                <d7p1:Value>14.3203125</d7p1:Value>
+                <d7p1:Key>2.56274414</d7p1:Key>
+                <d7p1:Value>6.07251</d7p1:Value>
               </d7p1:KeyValueOffloatfloat>
             </actuatorConnections>
             <parent i:type="Spine" z:Ref="i4" />
@@ -101,42 +101,34 @@
         <cluster>1</cluster>
         <conections xmlns:d5p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
           <d5p1:KeyValueOfNeuronfloat>
-            <d5p1:Key i:type="Actuator" z:Id="i10">
-              <cluster>1</cluster>
-              <conections xmlns:d8p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
-                <d8p1:KeyValueOfNeuronfloat>
-                  <d8p1:Key z:Id="i11">
-                    <cluster>2</cluster>
-                    <conections xmlns:d11p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-                    <state>0.5</state>
-                  </d8p1:Key>
-                  <d8p1:Value>0.135986328</d8p1:Value>
-                </d8p1:KeyValueOfNeuronfloat>
-                <d8p1:KeyValueOfNeuronfloat>
-                  <d8p1:Key z:Id="i12">
-                    <cluster>2</cluster>
-                    <conections xmlns:d11p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-                    <state>0.5</state>
-                  </d8p1:Key>
-                  <d8p1:Value>14.3203125</d8p1:Value>
-                </d8p1:KeyValueOfNeuronfloat>
-              </conections>
-              <state>0.0007253364</state>
-              <actuator i:type="Thruster" z:Ref="i5" />
+            <d5p1:Key z:Id="i10">
+              <cluster>2</cluster>
+              <conections xmlns:d8p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+              <state>0.5</state>
             </d5p1:Key>
-            <d5p1:Value>3.50708</d5p1:Value>
-          </d5p1:KeyValueOfNeuronfloat>
-          <d5p1:KeyValueOfNeuronfloat>
-            <d5p1:Key z:Ref="i11" />
-            <d5p1:Value>2.19750977</d5p1:Value>
+            <d5p1:Value>11.0080566</d5p1:Value>
           </d5p1:KeyValueOfNeuronfloat>
         </conections>
-        <state>0.249496639</state>
+        <state>0.00405384135</state>
         <actuator i:type="Thruster" z:Ref="i3" />
       </Neuron>
-      <Neuron i:type="Actuator" z:Ref="i10" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <Neuron i:type="Actuator" z:Id="i11" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/">
+        <cluster>1</cluster>
+        <conections xmlns:d5p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+          <d5p1:KeyValueOfNeuronfloat>
+            <d5p1:Key z:Id="i12">
+              <cluster>2</cluster>
+              <conections xmlns:d8p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+              <state>0.5</state>
+            </d5p1:Key>
+            <d5p1:Value>6.07251</d5p1:Value>
+          </d5p1:KeyValueOfNeuronfloat>
+        </conections>
+        <state>0.04581461</state>
+        <actuator i:type="Thruster" z:Ref="i5" />
+      </Neuron>
+      <Neuron z:Ref="i10" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" />
       <Neuron z:Ref="i12" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <Neuron z:Ref="i11" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" />
     </neurons>
     <sensors>
       <Sensor z:Ref="i7" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" />

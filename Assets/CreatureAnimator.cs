@@ -38,6 +38,7 @@ public class CreatureAnimator : MonoBehaviour
     {
         if (AllCreatures.ContainsKey(CreatureID) == false)
         {
+            if (Simulation.AllCreatures.ContainsKey(CreatureID) == false) return;
             Creature c = Simulation.AllCreatures[CreatureID];
             AddCreatureToDict(CreatureID, c);
         }
