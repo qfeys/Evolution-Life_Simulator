@@ -55,10 +55,8 @@ static class Simulation
         switch (start)
         {
         case startingPopulation.fresh:
-            Creature c = AddCreature(Creature.Generate());
+            AddCreature(Creature.Generate());
             for (int i = 0; i < 600; i++) AddCreature(Creature.Generate());
-            //XmlHandler.SerializeCreature(c);
-            //AddCreature(XmlHandler.DeserialiseCreature());
             break;
         case startingPopulation.load:
             foreach (string dna in IOHandler.ListLoading("DNA/Gen" + Generation + ".dna"))
