@@ -100,7 +100,7 @@ static class Simulation
             AddNew();
             PushData();
             Time++;
-            if (Time > 20000) ended = true;
+            if (Time > 1000) ended = true;
         }
     }
 
@@ -194,7 +194,7 @@ static class Simulation
             sortedCreatures[i].creature.SaveDna("Gen" + Generation + ".dna");
             debg += sortedCreatures[i].creature.energy.ToString("n2") + " ";
         }
-        IOHandler.SerializeCreature(sortedCreatures[0].creature);
+        //IOHandler.SerializeCreature(sortedCreatures[0].creature);
         Debug.Log(debg + " Last " + sortedCreatures.Last().creature.energy);
     }
 
