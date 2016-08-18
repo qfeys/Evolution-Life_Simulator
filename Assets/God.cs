@@ -32,6 +32,7 @@ public class God : MonoBehaviour
 
     public void OnDestroy()
     {
+        Simulation.Aborted = true;
         simThread.Abort();
         Debug.Log("Secondary thread: " + simThread.ThreadState);
     }

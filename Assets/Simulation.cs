@@ -10,6 +10,7 @@ static class Simulation
     public const float deltaTime = 1.0f / 30;
     public static Queue<Frame> Data = new Queue<Frame>();
     public static bool IsActive = false;
+    public static volatile bool Aborted = false;
     static List<SimInfo> Creatures;
     static HashSet<int> MarkedForTermination;
     static Dictionary<Creature, Vector2> NewBorns;
@@ -83,7 +84,7 @@ static class Simulation
 
     static void Run()
     {
-        while (ended == false)
+        while (ended == false && Aborted == false)
         {
             foreach (SimInfo c in Creatures)
             {
