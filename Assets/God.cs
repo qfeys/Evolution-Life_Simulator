@@ -65,8 +65,8 @@ public class God : MonoBehaviour
     void Update()
     {
         if (Simulation.IsActive == false && presentTime == 0) { }   // Before the simulation starts
-        else if (spareTime > Simulation.deltaTime) { spareTime -= Simulation.deltaTime; }
-        else if (Simulation.Data.Count == 0) { }
+        else if (spareTime > Simulation.deltaTime) { spareTime -= Time.deltaTime; }   // We are running to much in front of the simulation, wait a bit.
+        else if (Simulation.Data.Count == 0) { }    // No available frames
         else
         {
             Simulation.Frame nextFrame = null;
