@@ -134,7 +134,7 @@ public class DNA {
         float[] ret = new float[16];
         for (int i = 0; i < 16; i++)
         {
-            ret[i] = BitConverter.ToUInt16(GetBytes(i * 8, 4), 0) / 4096.0f;
+            ret[i] = BitConverter.ToInt16(GetBytes(i * 8, 4), 0) / 4096.0f;
         }
         return ret;
     }
