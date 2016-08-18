@@ -101,6 +101,7 @@ public class Brain
                 int cluster = (int)cnct.Key;
                 List<Neuron> neurClust = GetCluster(neurons, cluster);
                 if (neurClust.Count == 0) continue;
+                Neuron source = neurClust[(int)(Math.Abs(cnct.Key - cluster) * neurClust.Count)];
                 if (conections.ContainsKey(source)) { conections[source] += cnct.Value; }
                 else { conections.Add(source, cnct.Value); }
             }
