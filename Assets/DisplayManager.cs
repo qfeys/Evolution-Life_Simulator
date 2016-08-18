@@ -48,6 +48,6 @@ public class DisplayManager : MonoBehaviour
 
     internal void SetPlayback(float playbackModifier)
     {
-        transform.Find("Playback").Find("Number").GetComponent<Text>().text = playbackModifier.ToString("n2");
+        transform.Find("Playback").Find("Number").GetComponent<Text>().text = playbackModifier.ToString("n1");
     }
 }
