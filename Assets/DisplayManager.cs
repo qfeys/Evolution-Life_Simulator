@@ -22,6 +22,7 @@ public class DisplayManager : MonoBehaviour
         transform.Find("Living creatures").Find("Number").GetComponent<Text>().text = "--";
         transform.Find("Selection ID").Find("Number").GetComponent<Text>().text = "--";
         transform.Find("Energy").Find("Number").GetComponent<Text>().text = "--";
+        transform.Find("Playback").Find("Number").GetComponent<Text>().text = "1.0";
     }
 
     public void setFields(int simProg, int renProg, int renBack, int LivCrea)
@@ -43,5 +44,10 @@ public class DisplayManager : MonoBehaviour
     {
         if (selection != null)
             transform.Find("Energy").Find("Number").GetComponent<Text>().text = selection.energy.ToString("n2");
+    }
+
+    internal void SetPlayback(float playbackModifier)
+    {
+        transform.Find("Playback").Find("Number").GetComponent<Text>().text = playbackModifier.ToString("n2");
     }
 }
