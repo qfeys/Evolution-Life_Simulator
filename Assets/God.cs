@@ -18,6 +18,7 @@ public class God : MonoBehaviour
     void Start()
     {
         if (TheOne == null) TheOne = this;
+        DisplayManager.TheOne.setBlank();
     }
 
     public void StartNewSimulation()
@@ -63,10 +64,7 @@ public class God : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Simulation.IsActive == false)
-        {
-            DisplayManager.TheOne.setBlank();
-        }
+        if (Simulation.IsActive == false && presentTime == 0) { }   // Before the simulation starts
         else if (spareTime > Simulation.deltaTime) { spareTime -= Simulation.deltaTime; }
         else if (Simulation.Data.Count == 0) { }
         else
