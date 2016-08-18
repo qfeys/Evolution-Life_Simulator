@@ -40,6 +40,7 @@ public static class IOHandler {
 
     static public void ListSaving(string url, List<object> list)
     {
+        Directory.CreateDirectory(Path.GetDirectoryName(url));
         using (StreamWriter sw = new StreamWriter(url,true))
         {
             foreach (object obj in list)

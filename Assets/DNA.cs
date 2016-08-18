@@ -164,6 +164,6 @@ public class DNA {
 
     public void Save(string url = "DNA.txt")
     {
-        IOHandler.ListSaving("DNA/" + url, new List<object>() { this });
+        IOHandler.ListSaving(@"DNA\" + url, new List<object>() { this });
     }
 }
