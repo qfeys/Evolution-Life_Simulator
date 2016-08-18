@@ -55,10 +55,8 @@ static class Simulation
         switch (start)
         {
         case startingPopulation.fresh:
-            Creature c = AddCreature(Creature.Generate());
+            AddCreature(Creature.Generate());
             for (int i = 0; i < 600; i++) AddCreature(Creature.Generate());
-            //XmlHandler.SerializeCreature(c);
-            //AddCreature(XmlHandler.DeserialiseCreature());
             break;
         case startingPopulation.load:
             foreach (string dna in IOHandler.ListLoading("DNA/Gen" + Generation + ".dna"))
@@ -100,7 +98,7 @@ static class Simulation
             AddNew();
             PushData();
             Time++;
-            if (Time > 20000) ended = true;
+            if (Time > 2000) ended = true;
         }
     }
 
@@ -147,7 +145,6 @@ static class Simulation
 
     static void RemoveDeath()
     {
-        if (MarkedForTermination.Count > 0) Debug.Log("Creature died!");
         Creatures.RemoveAll(simInf => MarkedForTermination.Contains(simInf.ID));
         MarkedForTermination = new HashSet<int>();
     }
@@ -165,7 +162,6 @@ static class Simulation
         foreach(KeyValuePair<Creature,Vector2> nb in NewBorns)
         {
             Creatures.Add(new SimInfo(nb.Key, nb.Value.x, nb.Value.y));
-            Debug.Log("New creature born!");
         }
         NewBorns = new Dictionary<Creature, Vector2>();
     }
@@ -194,7 +190,7 @@ static class Simulation
             sortedCreatures[i].creature.SaveDna("Gen" + Generation + ".dna");
             debg += sortedCreatures[i].creature.energy.ToString("n2") + " ";
         }
-        IOHandler.SerializeCreature(sortedCreatures[0].creature);
+        //IOHandler.SerializeCreature(sortedCreatures[0].creature);
         Debug.Log(debg + " Last " + sortedCreatures.Last().creature.energy);
     }
 

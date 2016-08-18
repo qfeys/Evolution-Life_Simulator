@@ -9,8 +9,6 @@ using System.Runtime.Serialization;
 
 public static class IOHandler {
 
-    //static FileStream stream = new FileStream("Creature.dcs", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read);
-
     static public void SerializeCreature(Creature cr)
     {
         using (XmlWriter XWstream = XmlWriter.Create("Creature.dcs", new XmlWriterSettings() { Indent = true }))
@@ -19,10 +17,7 @@ public static class IOHandler {
                                  from assemblyType in domainAssembly.GetTypes()
                                  where typeof(Node).IsAssignableFrom(assemblyType)
                                  select assemblyType).ToArray();
-            //XmlSerializer xsr = new XmlSerializer(typeof(Creature), extraTypes);
-            //stream.Seek(0, SeekOrigin.Begin);
             DataContractSerializer dcs = new DataContractSerializer(typeof(Creature), extraTypes, 1000, false, true, null);
-            //xsr.Serialize(stream, cr);
             dcs.WriteObject(XWstream, cr);
             Debug.Log("New XML File Written");
         }
@@ -36,10 +31,7 @@ public static class IOHandler {
                                  from assemblyType in domainAssembly.GetTypes()
                                  where typeof(Node).IsAssignableFrom(assemblyType)
                                  select assemblyType).ToArray();
-            XmlSerializer xsr = new XmlSerializer(typeof(Creature), extraTypes);
-            //stream.Seek(0, SeekOrigin.Begin);
             DataContractSerializer dcs = new DataContractSerializer(typeof(Creature), extraTypes);
-            //Creature rt = (Creature)xsr.Deserialize(stream);
             Creature rt = (Creature)dcs.ReadObject(XRstream);
             Debug.Log("Deserialised!");
             return rt;

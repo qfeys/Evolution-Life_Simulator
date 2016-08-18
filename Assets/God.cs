@@ -65,8 +65,7 @@ public class God : MonoBehaviour
     {
         if (Simulation.IsActive == false)
         {
-            UIPanel.Find("Simulation cycle").Find("Number").GetComponent<Text>().text = "--";
-            UIPanel.Find("Simulation progress").Find("Number").GetComponent<Text>().text = "--";
+            DisplayManager.TheOne.setBlank();
         }
         else if (spareTime > Simulation.deltaTime) { spareTime -= Simulation.deltaTime; }
         else if (Simulation.Data.Count == 0) { }
@@ -78,8 +77,8 @@ public class God : MonoBehaviour
             {
                 nextFrame = Simulation.Data.Dequeue();
                 presentTime = nextFrame.time;
-                UIPanel.Find("Simulation cycle").Find("Number").GetComponent<Text>().text = nextFrame.time.ToString();
-                UIPanel.Find("Simulation progress").Find("Number").GetComponent<Text>().text = Simulation.Data.Count.ToString();
+                int backlog = Simulation.Data.Count;
+                DisplayManager.TheOne.setFields(presentTime + backlog, presentTime, backlog, nextFrame.data.Count);
             }
             catch (NullReferenceException e)
             {
