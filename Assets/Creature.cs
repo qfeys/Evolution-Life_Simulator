@@ -121,7 +121,8 @@ public class Creature
             c.mainNode.AddNode(1, 4 * Mathf.PI / 3).AddNode<Node.Thruster>(1, Mathf.PI, new object[2] { 1, new Dictionary<float, float>() { { values[4], values[5] }, { values[6], values[7] } } });
         else
             c.mainNode.AddNode(1, 2 * Mathf.PI / 3).AddNode<Node.Thruster>(1, Mathf.PI, new object[2] { 1, new Dictionary<float, float>() { { values[4], values[5] + values[7] } } });
-        c.mainNode.AddNode<Node.PhSyU>(1, Mathf.PI).AddSensor(Node.Sensor.SensorType.light);
+        c.mainNode.AddNode<Node.PhSyU>(1, Mathf.PI / 2).AddSensor(Node.Sensor.SensorType.light);
+        c.mainNode.AddNode<Node.PhSyU>(1, Mathf.PI * 3 / 2).AddSensor(Node.Sensor.SensorType.light);
         c.brain = new Brain(c.mainNode);
         if (values[8] != values[10])
             c.brain.AddNeuron(new Dictionary<float, float>() { { values[8], values[9] }, { values[10], values[11] } }, 2);

@@ -9,7 +9,7 @@ namespace Maps
     static class Light
     {
         static float[,] map = new float[Simulation.mapsize, Simulation.mapsize];
-        static double max = 80;
+        static double max = 60;
 
         public static void Initialise()
         {
