@@ -131,7 +131,7 @@ public class Brain
 
         public override string ToString()
         {
-            if (conections == null) return ID;           
+            if (conections == null || conections.Count == 0) return ID;
             return ID + "; " + string.Join("; ", conections.ToList().ConvertAll(c => "" + c.Key.ID + "," + c.Value.ToString("n3")).OrderBy(s => s).ToArray());
         }
 
