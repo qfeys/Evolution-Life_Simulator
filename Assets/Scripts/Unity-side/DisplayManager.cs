@@ -8,9 +8,14 @@ public class DisplayManager : MonoBehaviour
 {
     static public DisplayManager TheOne;
     Creature selection;
-    public void Start()
+
+    public void Awake()
     {
         if (TheOne == null) TheOne = this;
+    }
+
+    public void Start()
+    {
         setBlank();
     }
 

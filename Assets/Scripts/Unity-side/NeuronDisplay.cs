@@ -2,16 +2,21 @@
 using System.Collections;
 using System;
 
-public class NeuronDisplay : MonoBehaviour {
+public class NeuronDisplay : MonoBehaviour
+{
     public static NeuronDisplay TheOne;
 
     Creature selection;
 
-	// Use this for initialization
-	void Start () {
+    public void Awake()
+    {
         if (TheOne == null) TheOne = this;
+    }
+
+    void Start()
+    {
         gameObject.SetActive(false);
-	}
+    }
 
     internal void SetSelection(Creature selection)
     {
