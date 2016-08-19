@@ -11,6 +11,8 @@ public class God : MonoBehaviour
     public Transform UIPanel;
     public int presentTime { get; private set; }
     float spareTime = 0;
+    public float playbackModifier { get; private set; }
+    float deltaTime { get { return Simulation.deltaTime / playbackModifier; } }
 
     bool isActive;
 
@@ -18,6 +20,8 @@ public class God : MonoBehaviour
     void Start()
     {
         if (TheOne == null) TheOne = this;
+        playbackModifier = 1;
+        DisplayManager.TheOne.setBlank();
     }
 
     public void StartNewSimulation()
@@ -31,6 +35,7 @@ public class God : MonoBehaviour
 
     public void OnDestroy()
     {
+        Simulation.Aborted = true;
         simThread.Abort();
         Debug.Log("Secondary thread: " + simThread.ThreadState);
     }
@@ -63,12 +68,9 @@ public class God : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Simulation.IsActive == false)
-        {
-            DisplayManager.TheOne.setBlank();
-        }
-        else if (spareTime > Simulation.deltaTime) { spareTime -= Simulation.deltaTime; }
-        else if (Simulation.Data.Count == 0) { }
+        if (Simulation.IsActive == false && presentTime == 0) { }   // Before the simulation starts
+        else if (spareTime > deltaTime) { spareTime -= Time.deltaTime; }   // We are running to much in front of the simulation, wait a bit.
+        else if (Simulation.Data.Count == 0) { }    // No available frames
         else
         {
             Simulation.Frame nextFrame = null;
@@ -90,12 +92,12 @@ public class God : MonoBehaviour
                 int i = 0;
                 foreach (Simulation.SimInfo smfo in nextFrame)
                 {
-                    if (i++ > 500) break;
+                    if (i++ > 200) break;
                     CreatureAnimator.TheOne.RequestDraw(smfo.ID, new Vector3(smfo.X, smfo.Y, smfo.Th));
                 }
             }
             else Debug.Log("No frame available. Drawing skipped.");
-            spareTime += Simulation.deltaTime - Time.deltaTime;
+            spareTime += deltaTime - Time.deltaTime;    // Time we have left because we worked to fast
         }
         //GetComponent<TextMesh>().text = Simulation.Data.Dequeue().time.ToString();
         if (exception != null) throw exception;
@@ -126,5 +128,11 @@ public class God : MonoBehaviour
         var texture = Maps.Light.GetImage(minX, maxX, minY, maxY, resolution);
         goMap.AddComponent<Image>().sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0, 0), 100);
 
+    }
+
+    public void ChangePlayback(float factor)
+    {
+        playbackModifier *= factor;
+        DisplayManager.TheOne.SetPlayback(playbackModifier);
     }
 }
