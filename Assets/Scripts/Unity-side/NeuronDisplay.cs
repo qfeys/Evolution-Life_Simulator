@@ -16,5 +16,6 @@ public class NeuronDisplay : MonoBehaviour {
     internal void SetSelection(Creature selection)
     {
         this.selection = selection;
+        Debug.Log(selection.brain.ToString());
     }
 }

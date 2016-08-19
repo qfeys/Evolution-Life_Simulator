@@ -72,7 +72,7 @@ public class Brain
 
     public override string ToString()
     {
-        return string.Join("-", neurons.ConvertAll(n => n.ToString()).OrderBy(s => s).ToArray());
+        return string.Join("|", neurons.ConvertAll(n => n.ToString()).OrderBy(s => s).ToArray());
     }
 
     [DataContract(IsReference = true)]
@@ -99,6 +99,7 @@ public class Brain
 
         internal void Finalise(List<Neuron> neurons)
         {
+            ID = "" + this.cluster + "," + GetCluster(neurons, this.cluster).IndexOf(this);
             if (templateConnections == null) return;
             conections = new Dictionary<Neuron, float>();
             foreach (KeyValuePair<float, float> cnct in templateConnections)
@@ -111,7 +112,6 @@ public class Brain
                 if (conections.ContainsKey(source)) { conections[source] += cnct.Value; }
                 else { conections.Add(source, cnct.Value); }
             }
-            ID = "" + this.cluster + "," + GetCluster(neurons, this.cluster).IndexOf(this);
         }
 
         public void ComputeState()
@@ -131,6 +131,7 @@ public class Brain
 
         public override string ToString()
         {
+            if (conections == null) return ID;           
             return ID + "; " + string.Join("; ", conections.ToList().ConvertAll(c => "" + c.Key.ID + "," + c.Value.ToString("n3")).OrderBy(s => s).ToArray());
         }
 
