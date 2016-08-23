@@ -70,6 +70,11 @@ public class Brain
         return neurons.FindAll(n => n.cluster == cluster);
     }
 
+    public override string ToString()
+    {
+        return string.Join("|", neurons.ConvertAll(n => n.ToString()).OrderBy(s => s).ToArray());
+    }
+
     [DataContract(IsReference = true)]
     class Neuron
     {
@@ -84,6 +89,7 @@ public class Brain
         [DataMember]
         Dictionary<Neuron, float> conections;
         Dictionary<float, float> templateConnections;
+        string ID;
 
         public Neuron(Dictionary<float, float> conections, int cluster)
         {
@@ -93,6 +99,7 @@ public class Brain
 
         internal void Finalise(List<Neuron> neurons)
         {
+            ID = "" + this.cluster + "," + GetCluster(neurons, this.cluster).IndexOf(this);
             if (templateConnections == null) return;
             conections = new Dictionary<Neuron, float>();
             foreach (KeyValuePair<float, float> cnct in templateConnections)
@@ -121,6 +128,12 @@ public class Brain
         /// Loads state into newstate and multiplys by the sigmund function
         /// </summary>
         public  void ConfirmState() { state = (float)(1/(1+ Math.Exp( nextState))); }
+
+        public override string ToString()
+        {
+            if (conections == null || conections.Count == 0) return ID;
+            return ID + ";" + string.Join(";", conections.ToList().ConvertAll(c => "" + c.Key.ID + "," + c.Value.ToString("n3")).OrderBy(s => s).ToArray());
+        }
 
         /// <summary>
         /// A neuron connected to a sensor

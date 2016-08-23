@@ -16,10 +16,14 @@ public class God : MonoBehaviour
 
     bool isActive;
 
+    public void Awake()
+    {
+        if (TheOne == null) TheOne = this;
+    }
+
     // Use this for initialization
     void Start()
     {
-        if (TheOne == null) TheOne = this;
         playbackModifier = 1;
         DisplayManager.TheOne.setBlank();
     }

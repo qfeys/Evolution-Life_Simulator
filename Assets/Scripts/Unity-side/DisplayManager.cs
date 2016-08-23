@@ -8,9 +8,14 @@ public class DisplayManager : MonoBehaviour
 {
     static public DisplayManager TheOne;
     Creature selection;
-    public void Start()
+
+    public void Awake()
     {
         if (TheOne == null) TheOne = this;
+    }
+
+    public void Start()
+    {
         setBlank();
     }
 
@@ -38,6 +43,7 @@ public class DisplayManager : MonoBehaviour
         this.selection = selection;
         transform.Find("Selection ID").Find("Number").GetComponent<Text>().text = id.ToString();
         transform.Find("Energy").Find("Number").GetComponent<Text>().text = selection.energy.ToString("n2");
+        NeuronDisplay.TheOne.SetSelection(selection);
     }
 
     public void OnGUI()

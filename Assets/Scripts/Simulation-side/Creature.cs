@@ -54,7 +54,7 @@ public class Creature
                 float magnetude = ((Node.Thruster)(aResp.node)).force * aResp.value;
                 float fx = magnetude * Mathf.Cos(aResp.theta);
                 float fy = magnetude * Mathf.Sin(aResp.theta);
-                float tau = fx * aResp.x + fy * aResp.y;
+                float tau = fx * aResp.y + fy * aResp.x;
                 forces += new Vector3(fx, fy, tau);
                 energy -= aResp.value * Simulation.deltaTime;
                 break;
