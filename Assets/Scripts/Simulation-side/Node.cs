@@ -30,7 +30,8 @@ public abstract class Node
     /// <summary>
     ///  Warning, Don't call this to much!
     /// </summary>
-    public Vector2 RealPos { get { return Parent == null ? Vector2.zero : Parent.RealPos + realSize * new Vector2(Mathf.Cos(realOriantation), Mathf.Sin(realOriantation)); } }
+    public Vector2 RealPos { get { return Parent == null ? Vector2.zero :
+                Parent.RealPos + (realSize + parent.realSize) / 2 * new Vector2(-Mathf.Cos(realOriantation), -Mathf.Sin(realOriantation)); } }
     [DataMember]
     public float toughness { get; private set; }
     public float mass { get { return size * toughness; } }
