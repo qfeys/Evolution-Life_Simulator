@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,11 +23,12 @@ public class NeuronDisplay : MonoBehaviour
 
     internal void SetSelection(Creature selection)
     {
+        if (this.selection == selection) return;
+        if (this.selection != null) CleanUp();
         this.selection = selection;
+        Debug.Log("NN: " + selection.brain.ToString());
         gameObject.SetActive(true);
-        Debug.LogError(selection.brain.ToString());
         List<string> neurons = new List<string>(selection.brain.ToString().Split('|'));
-        neurons.ForEach(n => Debug.Log(n));
         float size = ((RectTransform)transform).rect.width / neurons.Count;
         float radius = ((RectTransform)transform).rect.width / 2 - size * 1.5f;
         float arcDelta = Mathf.PI * 2 / neurons.Count;
@@ -47,23 +49,34 @@ public class NeuronDisplay : MonoBehaviour
                     var val = s.Split(',');
                     return val[0].Equals(values[0]) && val[1].Equals(values[1]);
                 });
-                DrawBezier(new Vector3(Mathf.Sin(arcDelta * i) * radius, Mathf.Cos(arcDelta * i) * radius) + offset,
-                    new Vector3(Mathf.Sin(arcDelta * i) * radius / 2, Mathf.Cos(arcDelta * i) * radius / 2) + offset,
-                    new Vector3(Mathf.Sin(arcDelta * endpos) * radius, Mathf.Cos(arcDelta * endpos) * radius) + offset);
+                Debug.Log(endpos);
+                DrawBezier(new Vector3(Mathf.Sin(arcDelta * i) * radius, Mathf.Cos(arcDelta * i) * radius),
+                    new Vector3(Mathf.Sin(arcDelta * endpos) * radius / 2, Mathf.Cos(arcDelta * endpos) * radius / 2),
+                    new Vector3(Mathf.Sin(arcDelta * endpos) * radius, Mathf.Cos(arcDelta * endpos) * radius));
             }
         }
+    }
+
+    private void CleanUp()
+    {
+        var children = new List<GameObject>();
+        foreach (Transform child in transform) children.Add(child.gameObject);
+        children.ForEach(child => Destroy(child));
     }
 
     private void DrawBezier(Vector2 p0, Vector2 p1, Vector2 p2)
     {
         GameObject bezier = new GameObject();
         bezier.transform.SetParent(transform);
+        bezier.transform.localPosition = Vector3.zero;
+        bezier.AddComponent<RectTransform>().sizeDelta = Vector2.zero;
         var renderer = bezier.AddComponent<UILineRenderer>();
+        renderer.raycastTarget = false;
         int size = 9;
         renderer.Points = new Vector2[size];
         for (int i = 0; i < size; i++)
         {
-            renderer.Points[i] = Bezier.GetPoint(p0, p1, p2, 1f / size);
+            renderer.Points[i] = Bezier.GetPoint(p0, p1, p2, 1f / (size-1) * i);
         }
     }
 
