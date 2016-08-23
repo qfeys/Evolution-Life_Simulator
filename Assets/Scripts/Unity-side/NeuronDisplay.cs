@@ -48,12 +48,13 @@ public class NeuronDisplay : MonoBehaviour
                 var values = connections[j].Split(',');
                 int endpos = neurons.FindIndex(s =>
                 {
-                    var val = s.Split(',');
+                    var val = s.Split(';')[0].Split(',');
                     return val[0].Equals(values[0]) && val[1].Equals(values[1]);
                 });
                 DrawBezier(new Vector3(Mathf.Sin(arcDelta * i) * radius, Mathf.Cos(arcDelta * i) * radius),
                     new Vector3(Mathf.Sin(arcDelta * endpos) * radius / 2, Mathf.Cos(arcDelta * endpos) * radius / 2),
-                    new Vector3(Mathf.Sin(arcDelta * endpos) * radius, Mathf.Cos(arcDelta * endpos) * radius),
+                    i != endpos ? new Vector3(Mathf.Sin(arcDelta * endpos) * radius, Mathf.Cos(arcDelta * endpos) * radius) :
+                        new Vector3(Mathf.Sin(arcDelta * (endpos + 0.3f)) * radius, Mathf.Cos(arcDelta * (endpos + 0.3f)) * radius),
                     float.Parse(values[2]));
             }
         }
