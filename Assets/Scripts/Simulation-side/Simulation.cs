@@ -9,8 +9,9 @@ static class Simulation
     public const int mapsize = 100;
     public const float deltaTime = 1.0f / 30;
     public static Queue<Frame> Data = new Queue<Frame>();
-    public static bool IsActive = false;
+    public static volatile bool IsActive = false;
     public static volatile bool Aborted = false;
+    public static volatile bool HasFinished = false;
     static List<SimInfo> Creatures;
     static HashSet<int> MarkedForTermination;
     static Dictionary<Creature, Vector2> NewBorns;
@@ -182,14 +183,23 @@ static class Simulation
 
     static void Evaluate()
     {
-        var sortedCreatures = Creatures.OrderBy(c => -c.creature.energy).ToList();
-        string debg = "Energies: ";
+        Creatures = Creatures.OrderBy(c => -c.creature.energy).ToList();
+        HasFinished = true;
+    }
+
+    static public void Save(int number, string path)
+    {
+        if (HasFinished == false)
+        {
+            Debug.LogError("Cannot save. HAs not finished.");
+            return;
+        }
+        path = System.IO.Path.ChangeExtension(path, "dna");
+        number = number == 0 ? Creatures.Count : number;
         for (int i = 0; i < 10; i++)
         {
-            sortedCreatures[i].creature.SaveDna("Gen" + Generation + ".dna");
-            debg += sortedCreatures[i].creature.energy.ToString("n2") + " ";
+            Creatures[i].creature.SaveDna(path);
         }
-        Debug.Log(debg + " Last " + sortedCreatures.Last().creature.energy);
     }
 
     static float Random(int seed,int n, float max = 1, float min = 0)

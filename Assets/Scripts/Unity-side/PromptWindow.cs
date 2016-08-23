@@ -7,7 +7,7 @@ public class PromptWindow {
 
     GameObject window;
 
-    public PromptWindow(Canvas canvas, GameObject standardWindow, GameObject standardbutton, string text, SortedDictionary<string, Action> actions)
+    public PromptWindow(Canvas canvas, GameObject standardWindow, GameObject standardbutton, string text, List<KeyValuePair<string, Action>> actions)
     {
         window = UnityEngine.Object.Instantiate(window);
         window.transform.SetParent(canvas.transform);
