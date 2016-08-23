@@ -40,6 +40,8 @@ public class NeuronDisplay : MonoBehaviour
             neu.transform.SetParent(transform);
             neu.transform.localPosition = new Vector3(Mathf.Sin(arcDelta * i) * radius, Mathf.Cos(arcDelta * i) * radius) + offset;
             ((RectTransform)(neu.transform)).sizeDelta = new Vector2(size, size);
+            int cluster = int.Parse(neuron.Split(',')[0]);
+            neu.GetComponent<Image>().color = FindColor(cluster);
             var connections = neuron.Split(';');
             for (int j = 1; j < connections.Length; j++)
             {
@@ -55,6 +57,13 @@ public class NeuronDisplay : MonoBehaviour
                     new Vector3(Mathf.Sin(arcDelta * endpos) * radius, Mathf.Cos(arcDelta * endpos) * radius));
             }
         }
+    }
+
+    private Color FindColor(int cluster)
+    {
+        if (cluster == 0) return Color.green;
+        if (cluster == 1) return Color.red;
+        return Color.white;
     }
 
     private void CleanUp()
