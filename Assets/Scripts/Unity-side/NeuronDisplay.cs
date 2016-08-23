@@ -51,10 +51,10 @@ public class NeuronDisplay : MonoBehaviour
                     var val = s.Split(',');
                     return val[0].Equals(values[0]) && val[1].Equals(values[1]);
                 });
-                Debug.Log(endpos);
                 DrawBezier(new Vector3(Mathf.Sin(arcDelta * i) * radius, Mathf.Cos(arcDelta * i) * radius),
                     new Vector3(Mathf.Sin(arcDelta * endpos) * radius / 2, Mathf.Cos(arcDelta * endpos) * radius / 2),
-                    new Vector3(Mathf.Sin(arcDelta * endpos) * radius, Mathf.Cos(arcDelta * endpos) * radius));
+                    new Vector3(Mathf.Sin(arcDelta * endpos) * radius, Mathf.Cos(arcDelta * endpos) * radius),
+                    float.Parse(values[2]));
             }
         }
     }
@@ -73,7 +73,7 @@ public class NeuronDisplay : MonoBehaviour
         children.ForEach(child => Destroy(child));
     }
 
-    private void DrawBezier(Vector2 p0, Vector2 p1, Vector2 p2)
+    private void DrawBezier(Vector2 p0, Vector2 p1, Vector2 p2, float value)
     {
         GameObject bezier = new GameObject();
         bezier.transform.SetParent(transform);
@@ -81,6 +81,8 @@ public class NeuronDisplay : MonoBehaviour
         bezier.AddComponent<RectTransform>().sizeDelta = Vector2.zero;
         var renderer = bezier.AddComponent<UILineRenderer>();
         renderer.raycastTarget = false;
+        renderer.color = value < 0 ? Color.red : Color.green;
+        renderer.LineThickness = Mathf.Clamp(Mathf.Abs(value), 0, 6);
         int size = 9;
         renderer.Points = new Vector2[size];
         for (int i = 0; i < size; i++)
