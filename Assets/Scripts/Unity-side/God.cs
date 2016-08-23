@@ -28,13 +28,24 @@ public class God : MonoBehaviour
         DisplayManager.TheOne.setBlank();
     }
 
-    public void StartNewSimulation()
+    public void ToggleSimulation(bool enable)
+    {
+        if (enable) StartNewSimulation();
+        else EndSimulation();
+    }
+
+    void StartNewSimulation()
     {
         if (isActive) return;
         simThread = new Thread(() => SafeExecute(() => Simulation.Main(), Handler));
         simThread.Start();
         isActive = true;
         displayMap();
+    }
+
+    void EndSimulation()
+    {
+        Simulation.Aborted = true;
     }
 
     public void OnDestroy()
