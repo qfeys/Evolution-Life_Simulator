@@ -50,8 +50,6 @@ namespace Maps
         {
             // Create a new 2x2 texture ARGB32 (32 bit with alpha) and no mipmaps
             var texture = new UnityEngine.Texture2D((int)((xmax-xmin)*ppu), (int)((ymax-ymin)*ppu), UnityEngine.TextureFormat.ARGB32, false);
-            UnityEngine.Debug.Log("xmin: " + xmin + ", ymin: " + ymin + ", ppu: " + ppu);
-            UnityEngine.Debug.Log("xmax: " + xmax + ", ymax: " + ymax + ", range: " + (xmax - xmin) * ppu);
             // set the pixel values
             for (int i = 0; i < (xmax - xmin) * ppu; i++)
             {

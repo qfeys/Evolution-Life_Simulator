@@ -72,14 +72,13 @@ static class Simulation
                 for (int i = 0; i < 200; i++)
                 {
                     DNA fromString = DNA.FromString(dna);
-                    //Debug.Log(fromString.Count);
                     AddCreature(Creature.Generate(new DNA(fromString,20)));
                 }
             }
             Generation++;
             break;
         }
-        Debug.Log("Generation " + Generation + " populated with "+Creatures.Count+" creatures.");
+        Debug.Log("Generation " + Generation + " populated with " + Creatures.Count + " creatures.");
     }
 
     static void Run()
@@ -184,14 +183,12 @@ static class Simulation
     static void Evaluate()
     {
         var sortedCreatures = Creatures.OrderBy(c => -c.creature.energy).ToList();
-        Debug.Log("length " + sortedCreatures.Count);
         string debg = "Energies: ";
         for (int i = 0; i < 10; i++)
         {
             sortedCreatures[i].creature.SaveDna("Gen" + Generation + ".dna");
             debg += sortedCreatures[i].creature.energy.ToString("n2") + " ";
         }
-        //IOHandler.SerializeCreature(sortedCreatures[0].creature);
         Debug.Log(debg + " Last " + sortedCreatures.Last().creature.energy);
     }
 
@@ -240,13 +237,6 @@ static class Simulation
 
         public void UpdateVelocity()
         {
-            //Debug.Log(Time + ":velocity: " + velocity.ToString("F3"));
-            //Debug.Log("acceleration: " + requestedAcceleration);
-            //Debug.Log("Coords: " + X + " " + Y + " " + Th);
-            //XmlHandler.DebugWriteToFile(Time + ", " + velocity.x.ToString("F4") + ", " + velocity.y.ToString("F4") + ", " + velocity.z.ToString("F4")
-            //     + ", " + requestedAcceleration.x.ToString("F4") + ", " + requestedAcceleration.y.ToString("F4") + ", " + requestedAcceleration.z.ToString("F4")
-            //      + ", " + X.ToString("F4") + ", " + Y.ToString("F4") + ", " + Th.ToString("F4"));
-
             velocity += requestedAcceleration * deltaTime;
             Vector3 absVel = new Vector3(Mathf.Abs(velocity.x), Mathf.Abs(velocity.y), Mathf.Abs(velocity.z));
             velocity -= 0.1f * Vector3.Scale( Vector3.Scale(velocity, absVel),new Vector3(1,1,10));

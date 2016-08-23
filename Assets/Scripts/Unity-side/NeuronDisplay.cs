@@ -26,7 +26,6 @@ public class NeuronDisplay : MonoBehaviour
         if (this.selection == selection) return;
         if (this.selection != null) CleanUp();
         this.selection = selection;
-        Debug.Log("NN: " + selection.brain.ToString());
         gameObject.SetActive(true);
         List<string> neurons = new List<string>(selection.brain.ToString().Split('|'));
         float size = ((RectTransform)transform).rect.width / neurons.Count;
