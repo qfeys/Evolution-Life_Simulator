@@ -143,10 +143,20 @@ public class Creature
         Creature c = new Creature();
         c.Dna = dna;
         c.mainNode = new Node.Spine(null, dna.Float(0, 8, 4), 0, dna.Float(8, 8, 4), 0);
+        Stack<Node.Spine> spineStack = new Stack<Node.Spine>();
+        spineStack.Push(c.mainNode);
         // start reading all values
         for (int i = 10; i < dna.Count; i++)
         {
-
+            switch (dna.Code(i))
+            {
+            case DNA.Codex.none:
+                break;
+            case DNA.Codex.spine:
+                Node.Spine sp = new Node.Spine(spineStack.Peek(), dna.Float(i + 10, 8, 4), dna.GetAngle(i + 20), dna.Float(i + 30, 8, 4), 0);
+                spineStack.Push(sp);
+                break;
+            }
         }
 
         return c;

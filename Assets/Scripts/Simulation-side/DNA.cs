@@ -41,7 +41,7 @@ public class DNA {
         this.Dna = Dna;
     }
 
-    enum Codex { none, spine, thruster, photoSS, neuron }
+    public enum Codex { none, spine, thruster, photoSS, neuron }
 
     Dictionary<byte, Codex> codeBook = new Dictionary<byte, Codex> {
         {0x66, Codex.spine },
@@ -53,33 +53,6 @@ public class DNA {
         {0x93, Codex.neuron },
         {0xA3, Codex.neuron },
     };
-
-
-
-    //public Creature Read()
-    //{
-    //    Creature org = new Creature();
-    //    Node.Spine activeNode = null;
-
-    //    for (int i = 0; i < Count; i++)
-    //    {
-    //        byte nextSnippet = ToByte(GetRange(i, 8).ToArray());
-    //        if (codeBook.ContainsKey(nextSnippet)){
-    //            switch(codeBook[nextSnippet])
-    //            {
-    //            case Codex.node:
-    //                Node newNode = new Node.Spine(null,1,0,1,0);
-    //                if (activeNode != null) activeNode.AddNode(1,0);
-    //                break;
-    //            case Codex.sensor:
-
-    //                break;
-    //            }
-    //        }
-    //    }
-
-    //    return org;
-    //}
 
     byte GetByte(int pos)
     {
@@ -146,6 +119,14 @@ public class DNA {
             if (Dna[index + i]) ret++;
         }
         return ret;
+    }
+
+    public Codex Code(int index)
+    {
+        byte b = GetByte(index);
+        Codex c;
+        codeBook.TryGetValue(b, out c);
+        return c;
     }
 
     public override string ToString()
