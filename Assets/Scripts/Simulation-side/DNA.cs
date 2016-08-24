@@ -41,14 +41,17 @@ public class DNA {
         this.Dna = Dna;
     }
 
-    public enum Codex { none, spine, thruster, photoSS, neuron }
+    public enum Codex { none, spine, spineEnd, thruster, PhSyU, neuron }
 
     Dictionary<byte, Codex> codeBook = new Dictionary<byte, Codex> {
         {0x66, Codex.spine },
         {0x6e, Codex.spine },
         {0x76, Codex.spine },
         {0x72, Codex.thruster },
-        {0x46, Codex.photoSS },
+        {0x46, Codex.PhSyU },
+        {0x78, Codex.spineEnd },
+        {0x3c, Codex.spineEnd },
+        {0x1e, Codex.spineEnd },
         {0x83, Codex.neuron },
         {0x93, Codex.neuron },
         {0xA3, Codex.neuron },
@@ -95,6 +98,17 @@ public class DNA {
         return ret;
     }
 
+    public int Int(int index, int bytes)
+    {
+        int ret = 0;
+        for (int i = 0; i < bytes; i++)
+        {
+            ret *= 2;
+            if (Dna[index + i]) ret++;
+        }
+        return ret;
+    }
+
     public float Float(int index, int bytes, int shift)
     {
         float ret = 0;
@@ -110,15 +124,9 @@ public class DNA {
         return ret;
     }
 
-    public int Int(int index, int bytes)
+    public float sFloat(int index, int bytes, int shift)
     {
-        int ret = 0;
-        for (int i = 0; i < bytes; i++)
-        {
-            ret *= 2;
-            if (Dna[index + i]) ret++;
-        }
-        return ret;
+        return Float(index + 1, bytes - 1, shift) * (Dna[index] ? 1 : -1);
     }
 
     public Codex Code(int index)

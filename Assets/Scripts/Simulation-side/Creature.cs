@@ -153,13 +153,36 @@ public class Creature
             case DNA.Codex.none:
                 break;
             case DNA.Codex.spine:
-                Node.Spine sp = new Node.Spine(spineStack.Peek(), dna.Float(i + 10, 8, 4), dna.GetAngle(i + 20), dna.Float(i + 30, 8, 4), 0);
-                spineStack.Push(sp);
+                spineStack.Push(new Node.Spine(spineStack.Peek(), dna.Float(i + 10, 8, 4), dna.GetAngle(i + 20), dna.Float(i + 30, 8, 4), 0));
+                break;
+            case DNA.Codex.spineEnd:
+                spineStack.Pop();
+                break;
+            case DNA.Codex.PhSyU:
+                new Node.PhSyU(spineStack.Peek(), dna.Float(i + 10, 8, 4), dna.GetAngle(i + 20), dna.Float(i + 30, 8, 4));
+                break;
+            case DNA.Codex.thruster:
+                new Node.Thruster(spineStack.Peek(), dna.Float(i + 10, 8, 4), dna.GetAngle(i + 20), dna.Float(i + 30, 8, 4)
+                    , dna.Float(i + 40, 8, 4), GenerateNeuralConnections(dna, i + 50));
+                break;
+            case DNA.Codex.neuron:
+                c.brain.AddNeuron(GenerateNeuralConnections(dna, i + 16), dna.Int(i + 10, 4));
                 break;
             }
         }
 
         return c;
+    }
+
+    static Dictionary<float,float> GenerateNeuralConnections(DNA dna, int index)
+    {
+        Dictionary<float, float> neuralConnections = new Dictionary<float, float>();
+        while(dna.Int(index,2) != 0)
+        {
+            neuralConnections.Add(dna.Float(index, 8, 4), dna.sFloat(index + 10, 8, 4));
+            index += 10;
+        }
+        return neuralConnections;
     }
 
     public struct FoodEvent
