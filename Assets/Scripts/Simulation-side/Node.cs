@@ -51,7 +51,9 @@ public abstract class Node
 
     public Node(Spine parent, float size, float position, float toughness = 1)
     {
-        Parent = parent; this.size = size; this.position = position; this.toughness = toughness;
+        Parent = parent; this.size = Mathf.Sqrt(size + 0.5f); this.position = position; this.toughness = Mathf.Sqrt(toughness + 1);
+        if (this.size == 0) Debug.Log("Size = 0");
+        if (this.toughness == 0) Debug.Log("toughness = 0");
         sensor = new List<Sensor>();
     }
 
@@ -109,7 +111,7 @@ public abstract class Node
         public float normalPosition;
 
         public float totalMass { get { return AllChildNodes.Sum(n => n.mass); } }
-        public float totalMomentOfInertia { get {return AllChildNodes.Sum(n => n.mass * Mathf.Pow(n.RealPos.magnitude, 2)); } }
+        public float totalMomentOfInertia { get {float I = AllChildNodes.Sum(n => n.mass * Mathf.Pow(n.RealPos.magnitude, 2)); return I == 0 ? 0.1f : I; } }
 
         private Spine() { }
 
@@ -144,6 +146,15 @@ public abstract class Node
             args = args.Concat(otherArgs).ToArray();
             T newNode = (T)Activator.CreateInstance(typeof(T), args);
             ChildNodes.Add(newNode);
+            return newNode;
+        }
+
+        /// <summary>
+        /// Add any already constructed node
+        /// </summary>
+        public T AddNode<T>(T newNode) where T : Node
+        {
+            childNodes.Add(newNode);
             return newNode;
         }
 

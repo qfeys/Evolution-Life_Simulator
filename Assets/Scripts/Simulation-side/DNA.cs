@@ -11,7 +11,7 @@ public class DNA {
 
     public DNA()
     {
-        int length = 16 * 16;   // size * number of elements
+        int length = 32 * 8;   // size * number of elements
         Dna = new bool[length];
         for (int i = 0; i < length; i++)
         {
@@ -74,7 +74,7 @@ public class DNA {
 
     byte ToByte(bool[] array)
     {
-        if (array.Length != 8) throw new System.ArgumentException("Array not of valid size. Actual size is: " + array.Length);
+        if (array.Length != 8) throw new ArgumentException("Array not of valid size. Actual size is: " + array.Length);
         byte ret = 0;
         for (int i = 0; i < 8; i++) if (array[i]) ret += (byte)(1 << i);
         return ret;
@@ -85,6 +85,8 @@ public class DNA {
     /// </summary>
     public float GetAngle(int index)
     {
+        if (testOverflow(index+8)) return 0;
+
         return (float)(GetByte(index) * Math.PI * 2 / 128);
     }
 
@@ -100,6 +102,8 @@ public class DNA {
 
     public int Int(int index, int bytes)
     {
+        if (testOverflow(index+bytes)) return 0;
+
         int ret = 0;
         for (int i = 0; i < bytes; i++)
         {
@@ -111,6 +115,8 @@ public class DNA {
 
     public float Float(int index, int bytes, int shift)
     {
+        if (testOverflow(index+bytes)) return 0;
+
         float ret = 0;
         for (int i = 0; i < bytes; i++)
         {
@@ -126,8 +132,11 @@ public class DNA {
 
     public float sFloat(int index, int bytes, int shift)
     {
+        if (testOverflow(index+bytes)) return 0;
         return Float(index + 1, bytes - 1, shift) * (Dna[index] ? 1 : -1);
     }
+
+    bool testOverflow(int lastIndex) { return (lastIndex >= Dna.Count()) ? true : false; }
 
     public Codex Code(int index)
     {

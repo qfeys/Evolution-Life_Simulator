@@ -105,7 +105,7 @@ public class Creature
         return null;
     }
 
-    public static Creature Generate() { return Generate(new DNA()); }
+    public static Creature Generate() { return Generate2(new DNA()); }
 
     public static Creature Generate(DNA dna)
     {
@@ -145,31 +145,45 @@ public class Creature
         c.mainNode = new Node.Spine(null, dna.Float(0, 8, 4), 0, dna.Float(8, 8, 4), 0);
         Stack<Node.Spine> spineStack = new Stack<Node.Spine>();
         spineStack.Push(c.mainNode);
+        c.brain = new Brain(c.mainNode);
         // start reading all values
-        for (int i = 10; i < dna.Count; i++)
+        for (int i = 10; i < dna.Count-10; i++)
         {
-            switch (dna.Code(i))
+            try
             {
-            case DNA.Codex.none:
-                break;
-            case DNA.Codex.spine:
-                spineStack.Push(new Node.Spine(spineStack.Peek(), dna.Float(i + 10, 8, 4), dna.GetAngle(i + 20), dna.Float(i + 30, 8, 4), 0));
-                break;
-            case DNA.Codex.spineEnd:
-                spineStack.Pop();
-                break;
-            case DNA.Codex.PhSyU:
-                new Node.PhSyU(spineStack.Peek(), dna.Float(i + 10, 8, 4), dna.GetAngle(i + 20), dna.Float(i + 30, 8, 4));
-                break;
-            case DNA.Codex.thruster:
-                new Node.Thruster(spineStack.Peek(), dna.Float(i + 10, 8, 4), dna.GetAngle(i + 20), dna.Float(i + 30, 8, 4)
-                    , dna.Float(i + 40, 8, 4), GenerateNeuralConnections(dna, i + 50));
-                break;
-            case DNA.Codex.neuron:
-                c.brain.AddNeuron(GenerateNeuralConnections(dna, i + 16), dna.Int(i + 10, 4));
-                break;
+                switch (dna.Code(i))
+                {
+                case DNA.Codex.none:
+                    break;
+                case DNA.Codex.spine:
+                    Node.Spine sp = new Node.Spine(spineStack.Peek(), dna.Float(i + 10, 8, 4), dna.GetAngle(i + 20), dna.Float(i + 30, 8, 4), 0);
+                    spineStack.Peek().AddNode(sp);
+                    spineStack.Push(sp);
+                    break;
+                case DNA.Codex.spineEnd:
+                    spineStack.Pop();
+                    if (spineStack.Count == 0) spineStack.Push(c.mainNode);
+                    break;
+                case DNA.Codex.PhSyU:
+                    Node.PhSyU ph = new Node.PhSyU(spineStack.Peek(), dna.Float(i + 10, 8, 4), dna.GetAngle(i + 20), dna.Float(i + 30, 8, 4));
+                    ph.AddSensor(Node.Sensor.SensorType.light);
+                    spineStack.Peek().AddNode(ph);
+                    break;
+                case DNA.Codex.thruster:
+                    Node.Thruster th = new Node.Thruster(spineStack.Peek(), dna.Float(i + 10, 8, 4), dna.GetAngle(i + 20), dna.Float(i + 30, 8, 4)
+                        , dna.Float(i + 40, 8, 4), GenerateNeuralConnections(dna, i + 50));
+                    spineStack.Peek().AddNode(th);
+                    break;
+                case DNA.Codex.neuron:
+                    c.brain.AddNeuron(GenerateNeuralConnections(dna, i + 16), dna.Int(i + 10, 4));
+                    break;
+                }
             }
+            catch (Exception e) { Debug.Log("index: " + i); throw e; }
         }
+
+        c.brain.Finalise();
+        c.phSyUs = c.mainNode.AllChildNodes.FindAll(cn => cn is Node.PhSyU).Cast<Node.PhSyU>().ToList();
 
         return c;
     }
@@ -179,7 +193,9 @@ public class Creature
         Dictionary<float, float> neuralConnections = new Dictionary<float, float>();
         while(dna.Int(index,2) != 0)
         {
-            neuralConnections.Add(dna.Float(index, 8, 4), dna.sFloat(index + 10, 8, 4));
+            float connection = dna.Float(index, 8, 4);
+            if (neuralConnections.ContainsKey(connection)) neuralConnections[connection] += dna.sFloat(index + 10, 8, 4);
+            else neuralConnections.Add(connection, dna.sFloat(index + 10, 8, 4));
             index += 10;
         }
         return neuralConnections;
