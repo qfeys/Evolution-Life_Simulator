@@ -90,6 +90,11 @@ public class God : MonoBehaviour
         else if (Simulation.Data.Count == 0) { }    // No available frames
         else
         {
+            while (spareTime < 0 && Simulation.Data.Count > 1)   // We are running behind with our render. Skip frames to catch up.
+            {
+                Simulation.Data.Dequeue();
+                spareTime += deltaTime;
+            }
             Simulation.Frame nextFrame = null;
 
             try
@@ -103,17 +108,14 @@ public class God : MonoBehaviour
             {
                 Debug.Log("Failed reading data: " + e.ToString());
             }
-
-            if (nextFrame != null)
-            {
+            
                 int i = 0;
-                foreach (Simulation.SimInfo smfo in nextFrame)
-                {
-                    if (i++ > 200) break;
-                    CreatureAnimator.TheOne.RequestDraw(smfo.ID, new Vector3(smfo.X, smfo.Y, smfo.Th));
-                }
+            foreach (Simulation.SimInfo smfo in nextFrame)
+            {
+                if (i++ > 200) break;
+                CreatureAnimator.TheOne.RequestDraw(smfo.ID, new Vector3(smfo.X, smfo.Y, smfo.Th));
             }
-            else Debug.Log("No frame available. Drawing skipped.");
+
             spareTime += deltaTime - Time.deltaTime;    // Time we have left because we worked to fast
         }
         //GetComponent<TextMesh>().text = Simulation.Data.Dequeue().time.ToString();
