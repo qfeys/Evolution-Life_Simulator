@@ -65,7 +65,9 @@ public class CreatureAnimator : MonoBehaviour
     {
         GameObject newNode = Instantiate(Prototypes[node.GetType()]);
         newNode.transform.SetParent(oldNode.transform);
-        newNode.transform.localPosition = new Vector3(Mathf.Cos(node.position), Mathf.Sin(node.position), 0) * node.distanceFromParent;
+        Vector3 parentWorldScale = oldNode.transform.lossyScale;
+        newNode.transform.localPosition =
+            new Vector3(Mathf.Cos(node.position) / parentWorldScale.x, Mathf.Sin(node.position) / parentWorldScale.y, 0) * node.distanceFromParent;
         newNode.transform.localScale = Vector3.one * node.size;
         newNode.transform.localRotation = Quaternion.Euler(0, 0, node.orientation * Mathf.Rad2Deg);
         if (node is Node.Spine && ((Node.Spine)node).HasChilderen())
