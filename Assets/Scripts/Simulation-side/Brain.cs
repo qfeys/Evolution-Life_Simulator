@@ -104,7 +104,6 @@ public class Brain
             conections = new Dictionary<Neuron, float>();
             foreach (KeyValuePair<float, float> cnct in templateConnections)
             {
-                //UnityEngine.Debug.Log("Neuron connection: " + cnct.Key + " , strenght: " + cnct.Value);
                 int cluster = (int)cnct.Key;
                 List<Neuron> neurClust = GetCluster(neurons, cluster);
                 if (neurClust.Count == 0) continue;

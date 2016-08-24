@@ -23,18 +23,17 @@ public class DNA {
 
     public DNA(DNA dna, float mutations = 5)
     {
-        //UnityEngine.Debug.Log("dna count: " + dna.Count);
         Dna = dna.Dna;
         int c2 = Count;
-        if (dna.Count != Count) UnityEngine.Debug.Log("DNA length bad copy.");
+        if (dna.Count != Count) UnityEngine.Debug.LogError("DNA length bad copy.");
         for (int i = 0; i < mutations; i++)
         {
             int c1 = Count;
             int pos = rand.Next(Dna.Count());
             Dna[pos] = !Dna[pos];
-            if (c1 != Count) UnityEngine.Debug.Log("DNA length changed.");
+            if (c1 != Count) UnityEngine.Debug.LogError("DNA length changed.");
         }
-        if (c2 != Count) UnityEngine.Debug.Log("DNA length changed a lot.");
+        if (c2 != Count) UnityEngine.Debug.LogError("DNA length changed a lot.");
     }
 
     DNA(bool[] Dna)

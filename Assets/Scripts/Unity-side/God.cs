@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using System;
 
@@ -28,13 +28,24 @@ public class God : MonoBehaviour
         DisplayManager.TheOne.setBlank();
     }
 
-    public void StartNewSimulation()
+    public void ToggleSimulation(bool enable)
+    {
+        if (enable) StartNewSimulation();
+        else EndSimulation();
+    }
+
+    void StartNewSimulation()
     {
         if (isActive) return;
         simThread = new Thread(() => SafeExecute(() => Simulation.Main(), Handler));
         simThread.Start();
         isActive = true;
         displayMap();
+    }
+
+    void EndSimulation()
+    {
+        Simulation.Aborted = true;
     }
 
     public void OnDestroy()
@@ -77,6 +88,11 @@ public class God : MonoBehaviour
         else if (Simulation.Data.Count == 0) { }    // No available frames
         else
         {
+            while (spareTime < 0 && Simulation.Data.Count > 1)   // We are running behind with our render. Skip frames to catch up.
+            {
+                Simulation.Data.Dequeue();
+                spareTime += deltaTime;
+            }
             Simulation.Frame nextFrame = null;
 
             try
@@ -90,20 +106,17 @@ public class God : MonoBehaviour
             {
                 Debug.Log("Failed reading data: " + e.ToString());
             }
-
-            if (nextFrame != null)
-            {
+            
                 int i = 0;
-                foreach (Simulation.SimInfo smfo in nextFrame)
-                {
-                    if (i++ > 200) break;
-                    CreatureAnimator.TheOne.RequestDraw(smfo.ID, new Vector3(smfo.X, smfo.Y, smfo.Th));
-                }
+            foreach (Simulation.SimInfo smfo in nextFrame)
+            {
+                if (i++ > 200) break;
+                CreatureAnimator.TheOne.RequestDraw(smfo.ID, new Vector3(smfo.X, smfo.Y, smfo.Th));
             }
-            else Debug.Log("No frame available. Drawing skipped.");
+
             spareTime += deltaTime - Time.deltaTime;    // Time we have left because we worked to fast
         }
-        //GetComponent<TextMesh>().text = Simulation.Data.Dequeue().time.ToString();
+        DisplayManager.TheOne.SetSaveButton(Simulation.HasFinished);
         if (exception != null) throw exception;
     }
 
@@ -138,5 +151,24 @@ public class God : MonoBehaviour
     {
         playbackModifier *= factor;
         DisplayManager.TheOne.SetPlayback(playbackModifier);
+    }
+
+    public void Save(int mode)
+    {
+        switch (mode)
+        {
+        case 0:     // Save one creature as xml
+            DisplayManager.TheOne.DisplaySaveLocationPrompt(@"Creatures\" + DateTime.Now.ToString(@"MMdd-HHmmss") + @".xml",
+                Simulation.SaveBest);
+            break;
+        case 1:     // Save the 10 best creatures as dna
+            DisplayManager.TheOne.DisplaySaveLocationPrompt(@"DNA\" + DateTime.Now.ToString(@"MMdd-HHmmss") + @".dna",
+                s => Simulation.SaveDna(10, s));
+            break;
+        case 2:     // Save all creatures as dna
+            DisplayManager.TheOne.DisplaySaveLocationPrompt(@"DNA\" + DateTime.Now.ToString(@"MMdd-HHmmss") + @".dna",
+                s => Simulation.SaveDna(0, s));
+            break;
+        }
     }
 }

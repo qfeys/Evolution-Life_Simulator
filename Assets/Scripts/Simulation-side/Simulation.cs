@@ -9,8 +9,9 @@ static class Simulation
     public const int mapsize = 100;
     public const float deltaTime = 1.0f / 30;
     public static Queue<Frame> Data = new Queue<Frame>();
-    public static bool IsActive = false;
+    public static volatile bool IsActive = false;
     public static volatile bool Aborted = false;
+    public static volatile bool HasFinished = false;
     static List<SimInfo> Creatures;
     static HashSet<int> MarkedForTermination;
     static Dictionary<Creature, Vector2> NewBorns;
@@ -72,14 +73,13 @@ static class Simulation
                 for (int i = 0; i < 200; i++)
                 {
                     DNA fromString = DNA.FromString(dna);
-                    //Debug.Log(fromString.Count);
                     AddCreature(Creature.Generate(new DNA(fromString,20)));
                 }
             }
             Generation++;
             break;
         }
-        Debug.Log("Generation " + Generation + " populated with "+Creatures.Count+" creatures.");
+        Debug.Log("Generation " + Generation + " populated with " + Creatures.Count + " creatures.");
     }
 
     static void Run()
@@ -183,16 +183,33 @@ static class Simulation
 
     static void Evaluate()
     {
-        var sortedCreatures = Creatures.OrderBy(c => -c.creature.energy).ToList();
-        Debug.Log("length " + sortedCreatures.Count);
-        string debg = "Energies: ";
+        Creatures = Creatures.OrderBy(c => -c.creature.energy).ToList();
+        HasFinished = true;
+    }
+
+    static public void SaveDna(int number, string path)
+    {
+        if (HasFinished == false)
+        {
+            Debug.LogError("Cannot save. Has not finished.");
+            return;
+        }
+        path = System.IO.Path.ChangeExtension(path, "dna");
+        number = number == 0 ? Creatures.Count : number;
         for (int i = 0; i < 10; i++)
         {
-            sortedCreatures[i].creature.SaveDna("Gen" + Generation + ".dna");
-            debg += sortedCreatures[i].creature.energy.ToString("n2") + " ";
+            Creatures[i].creature.SaveDna(path);
         }
-        //IOHandler.SerializeCreature(sortedCreatures[0].creature);
-        Debug.Log(debg + " Last " + sortedCreatures.Last().creature.energy);
+    }
+
+    static public void SaveBest(string path)
+    {
+        if (HasFinished == false)
+        {
+            Debug.LogError("Cannot save. Has not finished.");
+            return;
+        }
+        IOHandler.SerializeCreature(Creatures[0].creature, path);
     }
 
     static float Random(int seed,int n, float max = 1, float min = 0)
@@ -240,13 +257,6 @@ static class Simulation
 
         public void UpdateVelocity()
         {
-            //Debug.Log(Time + ":velocity: " + velocity.ToString("F3"));
-            //Debug.Log("acceleration: " + requestedAcceleration);
-            //Debug.Log("Coords: " + X + " " + Y + " " + Th);
-            //XmlHandler.DebugWriteToFile(Time + ", " + velocity.x.ToString("F4") + ", " + velocity.y.ToString("F4") + ", " + velocity.z.ToString("F4")
-            //     + ", " + requestedAcceleration.x.ToString("F4") + ", " + requestedAcceleration.y.ToString("F4") + ", " + requestedAcceleration.z.ToString("F4")
-            //      + ", " + X.ToString("F4") + ", " + Y.ToString("F4") + ", " + Th.ToString("F4"));
-
             velocity += requestedAcceleration * deltaTime;
             Vector3 absVel = new Vector3(Mathf.Abs(velocity.x), Mathf.Abs(velocity.y), Mathf.Abs(velocity.z));
             velocity -= 0.1f * Vector3.Scale( Vector3.Scale(velocity, absVel),new Vector3(1,1,10));
