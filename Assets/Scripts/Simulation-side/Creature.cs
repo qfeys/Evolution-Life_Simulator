@@ -76,8 +76,12 @@ public class Creature
                 break;
             }
         }
+        Debug.Log("Brain size: " + brain.size + ", " + (brain.size * 0.05f * Simulation.deltaTime) +
+            " , body mass: " + mass + ", " + (mass * 0.003f));
         // Brain energy consumption
-        energy -= brain.size * 0.2f *Simulation.deltaTime;
+        energy -= brain.size * 0.05f *Simulation.deltaTime;
+        // Base body energy consumption
+        energy -= mass * 0.005f;
         foreach (Node.PhSyU ph in phSyUs)
         {
             foodRequests.Add(new FoodEvent(FoodEvent.Source.light, ph.RealPos, ph.size * 0.02f));
