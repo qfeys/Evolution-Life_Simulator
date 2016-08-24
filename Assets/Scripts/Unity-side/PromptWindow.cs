@@ -9,8 +9,9 @@ public class PromptWindow {
 
     public PromptWindow(Canvas canvas, GameObject standardWindow, GameObject standardbutton, string text, List<KeyValuePair<string, Action>> actions)
     {
-        window = UnityEngine.Object.Instantiate(window);
+        window = UnityEngine.Object.Instantiate(standardWindow);
         window.transform.SetParent(canvas.transform);
+        window.transform.localPosition = Vector2.zero;
         window.transform.GetChild(0).GetComponent<Text>().text = text;
         foreach (var action in actions)
         {

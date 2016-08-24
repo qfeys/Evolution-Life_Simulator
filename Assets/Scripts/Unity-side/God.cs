@@ -9,8 +9,6 @@ public class God : MonoBehaviour
     public static God TheOne;
     Thread simThread;
     public Transform UIPanel;
-    public GameObject StandardWindow;
-    public GameObject StandardButton;
     public int presentTime { get; private set; }
     float spareTime = 0;
     public float playbackModifier { get; private set; }
@@ -118,7 +116,7 @@ public class God : MonoBehaviour
 
             spareTime += deltaTime - Time.deltaTime;    // Time we have left because we worked to fast
         }
-        //GetComponent<TextMesh>().text = Simulation.Data.Dequeue().time.ToString();
+        DisplayManager.TheOne.SetSaveButton(Simulation.HasFinished);
         if (exception != null) throw exception;
     }
 
@@ -153,14 +151,6 @@ public class God : MonoBehaviour
     {
         playbackModifier *= factor;
         DisplayManager.TheOne.SetPlayback(playbackModifier);
-    }
-
-    public void PromptSave()
-    {
-        new PromptWindow(transform.parent.GetComponent<Canvas>(), StandardWindow, StandardButton, "What do you want to save?",
-            new List<KeyValuePair<string, Action>>() { new KeyValuePair<string, Action>("Best creature",() => Save(0)),
-            new KeyValuePair<string, Action>("Best 10 creatures", () => Save(1)),
-            new KeyValuePair<string, Action>("All creatures", () => Save(2))});
     }
 
     public void Save(int mode)
