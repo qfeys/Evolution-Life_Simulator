@@ -138,6 +138,20 @@ public class Creature
         return c;
     }
 
+    public static Creature Generate2(DNA dna)
+    {
+        Creature c = new Creature();
+        c.Dna = dna;
+        c.mainNode = new Node.Spine(null, dna.Float(0, 8, 4), 0, dna.Float(8, 8, 4), 0);
+        // start reading all values
+        for (int i = 10; i < dna.Count; i++)
+        {
+
+        }
+
+        return c;
+    }
+
     public struct FoodEvent
     {
         public enum Source { light, meat}

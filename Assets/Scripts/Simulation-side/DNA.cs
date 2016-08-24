@@ -41,26 +41,18 @@ public class DNA {
         this.Dna = Dna;
     }
 
-    //enum Codex { none, node, sensor, grabber, thruster, armor, photoSS, neuron, reproduction  }
+    enum Codex { none, spine, thruster, photoSS, neuron }
 
-    //Dictionary<byte, Codex> codeBook = new Dictionary<byte, Codex> {
-    //    {0xf0, Codex.node },
-    //    {0xf1, Codex.node },
-    //    {0xf2, Codex.node },
-    //    {0xf3, Codex.node },
-    //    {0xf4, Codex.node },
-    //    {0xf5, Codex.node },
-    //    {0xf6, Codex.node },
-    //    {0xf7, Codex.node },
-    //    {0xf8, Codex.sensor },
-    //    {0xf9, Codex.grabber },
-    //    {0xfa, Codex.thruster },
-    //    {0xfb, Codex.armor },
-    //    {0xfc, Codex.photoSS },
-    //    {0xfd, Codex.neuron },
-    //    {0xfe, Codex.reproduction },
-    //    {0xff, Codex.reproduction },
-    //};
+    Dictionary<byte, Codex> codeBook = new Dictionary<byte, Codex> {
+        {0x66, Codex.spine },
+        {0x6e, Codex.spine },
+        {0x76, Codex.spine },
+        {0x72, Codex.thruster },
+        {0x46, Codex.photoSS },
+        {0x83, Codex.neuron },
+        {0x93, Codex.neuron },
+        {0xA3, Codex.neuron },
+    };
 
 
 
@@ -112,20 +104,12 @@ public class DNA {
         return ret;
     }
 
-    byte ToInt(bool[] array)
-    {
-        if (array.Length != 16) throw new System.ArgumentException("Array not of valid size. Actual size is: " + array.Length);
-        byte ret = 0;
-        for (int i = 0; i < 16; i++) if (array[i]) ret += (byte)(1 << i);
-        return ret;
-    }
-
     /// <summary>
-    /// The angle is always coded as a sInt8, and results in a number between -180 and +180.
+    /// The angle is always coded as a sInt8, and results in a number between 0 and 2Pi.
     /// </summary>
-    float readAngle(sbyte code)
+    public float GetAngle(int index)
     {
-        return (float)code / 128 * 180;
+        return (float)(GetByte(index) * Math.PI * 2 / 128);
     }
 
     public float[] GetValues()
@@ -134,6 +118,32 @@ public class DNA {
         for (int i = 0; i < 16; i++)
         {
             ret[i] = BitConverter.ToInt16(GetBytes(i * 8, 4), 0) / 4096.0f;
+        }
+        return ret;
+    }
+
+    public float Float(int index, int bytes, int shift)
+    {
+        float ret = 0;
+        for (int i = 0; i < bytes; i++)
+        {
+            ret *= 2;
+            if (Dna[index + i]) ret++;
+        }
+        for (int i = 0; i < shift; i++)
+        {
+            ret /= 2;
+        }
+        return ret;
+    }
+
+    public int Int(int index, int bytes)
+    {
+        int ret = 0;
+        for (int i = 0; i < bytes; i++)
+        {
+            ret *= 2;
+            if (Dna[index + i]) ret++;
         }
         return ret;
     }
