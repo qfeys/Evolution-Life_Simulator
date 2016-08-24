@@ -11,7 +11,7 @@ using UnityEngine;
 public abstract class Node
 {
     [System.Xml.Serialization.XmlIgnore]
-    public Node Parent { get { return parent; } private set { parent = value; } }
+    public Spine Parent { get { return parent; } private set { parent = value; } }
 
     /// <summary>
     /// This is the size relative to the parent node. For the base node this is absolute.
@@ -44,12 +44,12 @@ public abstract class Node
 
     #region Serializable fields
     [DataMember]
-    Node parent;
+    Spine parent;
     // Constructor for deserialisation
     private Node() { }
     #endregion
 
-    public Node(Node parent, float size, float position, float toughness = 1)
+    public Node(Spine parent, float size, float position, float toughness = 1)
     {
         Parent = parent; this.size = size; this.position = position; this.toughness = toughness;
         sensor = new List<Sensor>();
@@ -113,7 +113,7 @@ public abstract class Node
 
         private Spine() { }
 
-        public Spine(Node parent, float size, float position, float toughness, float force, Dictionary<float, float> actuatorConnections = null) :
+        public Spine(Spine parent, float size, float position, float toughness, float force, Dictionary<float, float> actuatorConnections = null) :
             base(parent, size, position, toughness)
         {
             ChildNodes = new List<Node>();
@@ -160,7 +160,7 @@ public abstract class Node
         public override Brain.ActuatorResponse.ActuatorType actuatorType { get { return Brain.ActuatorResponse.ActuatorType.force; } }
 
         private Thruster() { }
-        public Thruster(Node parent, float size, float position, float toughness, float force, Dictionary<float, float> actuatorConnections) :
+        public Thruster(Spine parent, float size, float position, float toughness, float force, Dictionary<float, float> actuatorConnections) :
             base(parent, size, position, toughness)
         {
             this.force = force;
@@ -177,7 +177,7 @@ public abstract class Node
         public override Brain.ActuatorResponse.ActuatorType actuatorType { get { return Brain.ActuatorResponse.ActuatorType.bite; } }
 
         private Grabber() { }
-        public Grabber(Node parent, float size, float position, float toughness, float pierce, Dictionary<float, float> actuatorConnections) :
+        public Grabber(Spine parent, float size, float position, float toughness, float pierce, Dictionary<float, float> actuatorConnections) :
             base(parent, size, position, toughness)
         {
             this.pierce = pierce;
@@ -194,7 +194,7 @@ public abstract class Node
         public override Brain.ActuatorResponse.ActuatorType actuatorType { get { return Brain.ActuatorResponse.ActuatorType.none; } }
         private PhSyU() { }
 
-        public PhSyU(Node parent, float size, float position, float toughness) :
+        public PhSyU(Spine parent, float size, float position, float toughness) :
             base(parent, size, position, toughness)
         {
         }
