@@ -9,6 +9,7 @@ public class DisplayManager : MonoBehaviour
     static public DisplayManager TheOne;
     public GameObject StandardWindow;
     public GameObject StandardButton;
+    public GameObject StandardInputField;
     Creature selection;
 
     public void Awake()
@@ -64,11 +65,17 @@ public class DisplayManager : MonoBehaviour
         transform.Find("SaveButton").GetComponent<Button>().interactable = enable;
     }
 
-    public void PromptSave()
+    public void DisplaySaveSelectionPrompt()
     {
         new PromptWindow(transform.parent.GetComponent<Canvas>(), StandardWindow, StandardButton, "What do you want to save?",
             new List<KeyValuePair<string, Action>>() { new KeyValuePair<string, Action>("Best creature",() => God.TheOne.Save(0)),
             new KeyValuePair<string, Action>("Best 10 creatures", () => God.TheOne.Save(1)),
             new KeyValuePair<string, Action>("All creatures", () => God.TheOne.Save(2))});
+    }
+
+    public void DisplaySaveLocationPrompt(string standardPath, Action<string> saveAction)
+    {
+        new PromptWindow(transform.parent.GetComponent<Canvas>(), StandardWindow, StandardButton, StandardInputField, "Chose a location",
+            standardPath, "Save", saveAction);
     }
 }
