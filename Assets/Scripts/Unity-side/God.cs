@@ -161,6 +161,14 @@ public class God : MonoBehaviour
             DisplayManager.TheOne.DisplaySaveLocationPrompt(@"Creatures\" + DateTime.Now.ToString(@"MMdd-HHmmss") + @".xml",
                 Simulation.SaveBest);
             break;
+        case 1:     // Save the 10 best creatures as dna
+            DisplayManager.TheOne.DisplaySaveLocationPrompt(@"DNA\" + DateTime.Now.ToString(@"MMdd-HHmmss") + @".dna",
+                s => Simulation.SaveDna(10, s));
+            break;
+        case 2:     // Save all creatures as dna
+            DisplayManager.TheOne.DisplaySaveLocationPrompt(@"DNA\" + DateTime.Now.ToString(@"MMdd-HHmmss") + @".dna",
+                s => Simulation.SaveDna(0, s));
+            break;
         }
     }
 }
