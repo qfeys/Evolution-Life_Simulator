@@ -9,9 +9,11 @@ using System.Runtime.Serialization;
 
 public static class IOHandler {
 
-    static public void SerializeCreature(Creature cr)
+    static public void SerializeCreature(Creature cr, string path)
     {
-        using (XmlWriter XWstream = XmlWriter.Create("Creature.dcs", new XmlWriterSettings() { Indent = true }))
+        path = Path.ChangeExtension(path, "xml");
+        Directory.CreateDirectory(Path.GetDirectoryName(path));
+        using (XmlWriter XWstream = XmlWriter.Create(path, new XmlWriterSettings() { Indent = true }))
         {
             Type[] extraTypes = (from domainAssembly in AppDomain.CurrentDomain.GetAssemblies()
                                  from assemblyType in domainAssembly.GetTypes()
@@ -19,13 +21,12 @@ public static class IOHandler {
                                  select assemblyType).ToArray();
             DataContractSerializer dcs = new DataContractSerializer(typeof(Creature), extraTypes, 1000, false, true, null);
             dcs.WriteObject(XWstream, cr);
-            Debug.Log("New XML File Written");
         }
     }
 
-    static public Creature DeserialiseCreature()
+    static public Creature DeserialiseCreature(string path)
     {
-        using (XmlReader XRstream = XmlReader.Create("Creature.dcs", new XmlReaderSettings() { }))
+        using (XmlReader XRstream = XmlReader.Create(path, new XmlReaderSettings() { }))
         {
             Type[] extraTypes = (from domainAssembly in AppDomain.CurrentDomain.GetAssemblies()
                                  from assemblyType in domainAssembly.GetTypes()
@@ -33,7 +34,6 @@ public static class IOHandler {
                                  select assemblyType).ToArray();
             DataContractSerializer dcs = new DataContractSerializer(typeof(Creature), extraTypes);
             Creature rt = (Creature)dcs.ReadObject(XRstream);
-            Debug.Log("Deserialised!");
             return rt;
         }
     }

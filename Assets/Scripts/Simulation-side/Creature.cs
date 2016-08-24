@@ -150,7 +150,7 @@ public class Creature
         }
     }
 
-    public void SaveState() { IOHandler.SerializeCreature(this); }
+    public void SaveState() { IOHandler.SerializeCreature(this, @"Creature\newSave"); }
     public void SaveDna(string url = "DNA.txt") { Dna.Save(url); }
 }
 

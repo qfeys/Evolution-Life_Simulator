@@ -157,8 +157,9 @@ public class God : MonoBehaviour
     {
         switch (mode)
         {
-        case 0:     // Save one creature as 
-
+        case 0:     // Save one creature as xml
+            DisplayManager.TheOne.DisplaySaveLocationPrompt(@"Creatures\" + DateTime.Now.ToString(@"MMdd-HHmmss") + @".xml",
+                Simulation.SaveBest);
             break;
         }
     }

@@ -187,11 +187,11 @@ static class Simulation
         HasFinished = true;
     }
 
-    static public void Save(int number, string path)
+    static public void SaveDna(int number, string path)
     {
         if (HasFinished == false)
         {
-            Debug.LogError("Cannot save. HAs not finished.");
+            Debug.LogError("Cannot save. Has not finished.");
             return;
         }
         path = System.IO.Path.ChangeExtension(path, "dna");
@@ -200,6 +200,16 @@ static class Simulation
         {
             Creatures[i].creature.SaveDna(path);
         }
+    }
+
+    static public void SaveBest(string path)
+    {
+        if (HasFinished == false)
+        {
+            Debug.LogError("Cannot save. Has not finished.");
+            return;
+        }
+        IOHandler.SerializeCreature(Creatures[0].creature, path);
     }
 
     static float Random(int seed,int n, float max = 1, float min = 0)
