@@ -58,7 +58,7 @@ static class Simulation
         {
         case startingPopulation.fresh:
             AddCreature(Creature.Generate());
-            for (int i = 0; i < 600; i++) AddCreature(Creature.Generate());
+            for (int i = 0; i < 1000; i++) AddCreature(Creature.Generate());
             break;
         case startingPopulation.load:
             foreach (string dna in IOHandler.ListLoading("DNA/Gen" + Generation + ".dna"))
