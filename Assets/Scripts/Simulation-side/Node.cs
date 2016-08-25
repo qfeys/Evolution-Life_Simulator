@@ -51,7 +51,7 @@ public abstract class Node
 
     public Node(Spine parent, float size, float position, float toughness = 1)
     {
-        Parent = parent; this.size = Mathf.Sqrt(size + 0.5f); this.position = position; this.toughness = Mathf.Sqrt(toughness + 1);
+        Parent = parent; this.size = Mathf.Pow(2, 0.125f * (size - 8)); this.position = position; this.toughness = Mathf.Sqrt(toughness + 1);
         if (this.size == 0) Debug.Log("Size = 0");
         if (this.toughness == 0) Debug.Log("toughness = 0");
         sensor = new List<Sensor>();

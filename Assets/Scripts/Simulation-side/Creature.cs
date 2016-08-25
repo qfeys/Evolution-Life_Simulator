@@ -76,8 +76,6 @@ public class Creature
                 break;
             }
         }
-        Debug.Log("Brain size: " + brain.size + ", " + (brain.size * 0.05f * Simulation.deltaTime) +
-            " , body mass: " + mass + ", " + (mass * 0.003f));
         // Brain energy consumption
         energy -= brain.size * 0.05f *Simulation.deltaTime;
         // Base body energy consumption
